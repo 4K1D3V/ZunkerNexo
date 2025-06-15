@@ -1,0 +1,23 @@
+name: ZunkerNexo
+version: 1.0-DEV
+main: gg.kite.Main
+api-version: 1.21
+depend: [Nexo]
+author: KiteGG
+description: Creates custom storage blocks using Nexo blocks with MySQL storage.
+commands:
+  zunkernexo:
+    description: Manage ZunkerNexo plugin
+    usage: /<command> [reload]
+    aliases: [zn]
+    permission: zunkernexo.use
+permissions:
+  zunkernexo.use:
+    description: Allows use of basic ZunkerNexo commands
+    default: true
+  zunkernexo.reload:
+    description: Allows reloading ZunkerNexo configuration
+    default: op
+  zunkernexo.interact:
+    description: Allows interacting with ZunkerNexo storage blocks
+    default: true

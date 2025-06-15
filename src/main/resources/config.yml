@@ -1,0 +1,18 @@
+# MySQL database settings
+mysql:
+  host: localhost
+  port: 3306
+  database: zunkernexo
+  username: root
+  password: password
+  pool-size: 10
+
+# Storage block configurations
+# nexo-id: Must match a valid Nexo block ID (e.g., from NexoBlocks.blockIDs())
+# menu-title: Supports & color codes (e.g., &6 for gold)
+# rows: Must be 1-6
+storage-blocks:
+  example_block:
+    nexo-id: "example:nexo_block"
+    menu-title: "&6Example Storage"
+    rows: 5
