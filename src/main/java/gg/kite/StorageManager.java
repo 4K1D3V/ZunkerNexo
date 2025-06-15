@@ -8,6 +8,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
 import net.kyori.adventure.text.Component;
 
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -142,9 +143,9 @@ public class StorageManager {
         return contents != null ? contents : new ItemStack[0];
     }
 
-    private byte[] serializeItems(ItemStack[] items) {
-        try (java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-             java.io.DataOutputStream dos = new java.io.DataOutputStream(baos)) {
+    private byte @NotNull [] serializeItems(ItemStack @NotNull [] items) {
+        try (ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+             DataOutputStream dos = new  DataOutputStream(baos)) {
             dos.writeInt(items.length);
             for (ItemStack item : items) {
                 byte[] itemBytes = item != null ? item.serializeAsBytes() : new byte[0];
@@ -152,14 +153,14 @@ public class StorageManager {
                 dos.write(itemBytes);
             }
             return baos.toByteArray();
-        } catch (java.io.IOException e) {
+        } catch ( IOException e) {
             throw new IllegalStateException("Failed to serialize items", e);
         }
     }
 
-    private ItemStack[] deserializeItems(byte[] bytes) {
-        try (java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(bytes);
-             java.io.DataInputStream dis = new java.io.DataInputStream(bais)) {
+    private ItemStack @NotNull [] deserializeItems(byte[] bytes) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+             DataInputStream dis = new  DataInputStream(bais)) {
             int length = dis.readInt();
             ItemStack[] items = new ItemStack[length];
             for (int i = 0; i < length; i++) {
@@ -171,7 +172,7 @@ public class StorageManager {
                 }
             }
             return items;
-        } catch (java.io.IOException e) {
+        } catch ( IOException e) {
             throw new IllegalStateException("Failed to deserialize items", e);
         }
     }

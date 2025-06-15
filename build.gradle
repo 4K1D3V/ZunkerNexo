@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'xyz.jpenilla.run-paper' version '2.3.1'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'gg.kite'
@@ -32,9 +33,9 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'com.zaxxer:HikariCP:6.3.0'
     compileOnly 'net.kyori:adventure-api:4.20.0'
-    implementation("team.unnamed:creative-api:1.9.0")
-    implementation("team.unnamed:creative-serializer-minecraft:1.9.0")
-    implementation("team.unnamed:creative-server:1.9.0")
+    implementation 'team.unnamed:creative-api:1.9.0'
+    implementation 'team.unnamed:creative-serializer-minecraft:1.9.0'
+    implementation 'team.unnamed:creative-server:1.9.0'
 }
 
 def targetJavaVersion = 21
@@ -58,8 +59,37 @@ tasks.withType(JavaCompile) {
 processResources {
     def props = [version: version]
     inputs.properties props
-    filteringCharset 'UTF-8'
+    filteringCharset = 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
     }
 }
+
+tasks.shadowJar {
+    archiveClassifier.set('')
+    // No relocations to bypass ASM processing
+}
+
+tasks.build {
+    dependsOn shadowJar
+}
+
+// Fallback configuration for Java 17 if runtime issues occur (uncomment to use):
+/*
+def targetJavaVersion = 17
+java {
+    sourceCompatibility = JavaVersion.toVersion(targetJavaVersion)
+    targetCompatibility = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < JavaVersion.toVersion(targetJavaVersion)) {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+*/
